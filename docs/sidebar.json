@@ -1,6 +1,7 @@
 {
   "fastpapers": {
     "Overview": "/",
-    "module name here": "core.html"
+    "module name here": "core.html",
+    "Image-to-Image Translation with Conditional Adversarial Networks": "isola2017image.html"
   }
 }

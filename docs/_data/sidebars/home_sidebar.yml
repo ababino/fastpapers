@@ -12,6 +12,9 @@ entries:
     - output: web,pdf
       title: module name here
       url: core.html
+    - output: web,pdf
+      title: Image-to-Image Translation with Conditional Adversarial Networks
+      url: isola2017image.html
     output: web
     title: fastpapers
   output: web

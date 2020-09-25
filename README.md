@@ -13,17 +13,6 @@ This file will become your README and also the index of your documentation.
 Fill me in please! Don't forget code examples:
 
 ```python
-1+1  
-```
-
-
-
-
-    2
-
-
-
-```python
 from fastai.data.external import untar_data,URLs
 from fastai.data.transforms import get_image_files
 from fastai.vision.augment import Resize, ToTensor
@@ -39,5 +28,5 @@ it.show();
 ```
 
 
-![png](docs/images/output_7_0.png)
+![png](docs/images/output_6_0.png)
 

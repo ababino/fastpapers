@@ -2,9 +2,23 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"ImageNTuple": "00_core.ipynb"}
+index = {"explode_types": "00_core.ipynb",
+         "explode_lens": "00_core.ipynb",
+         "explode_shapes": "00_core.ipynb",
+         "explode_ranges": "00_core.ipynb",
+         "ImageNTuple": "00_core.ipynb",
+         "ImageTupleBlock": "00_core.ipynb",
+         "ConditionalGenerator": "00_core.ipynb",
+         "SiameseCritic": "00_core.ipynb",
+         "GenMetric": "00_core.ipynb",
+         "CriticMetric": "00_core.ipynb",
+         "l1": "00_core.ipynb",
+         "GANLearner.show_results": "00_core.ipynb",
+         "gen_bce_l1_loss": "01_isola2017image.ipynb",
+         "crit_bce_loss": "01_isola2017image.ipynb"}
 
-modules = ["core.py"]
+modules = ["core.py",
+           "isola2017image.py"]
 
 doc_url = "https://ababino.github.io/fastpapers/"
 
