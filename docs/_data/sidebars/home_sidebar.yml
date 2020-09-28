@@ -10,11 +10,15 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
-      title: module name here
+      title: Core
       url: core.html
     - output: web,pdf
       title: Image-to-Image Translation with Conditional Adversarial Networks
       url: isola2017image.html
+    - output: web,pdf
+      title: GANs Trained by a Two Time-Scale Update Rule Converge to a Local Nash
+        Equilibrium
+      url: heusel2017gans.html
     output: web
     title: fastpapers
   output: web

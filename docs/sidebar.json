@@ -1,7 +1,8 @@
 {
   "fastpapers": {
     "Overview": "/",
-    "module name here": "core.html",
-    "Image-to-Image Translation with Conditional Adversarial Networks": "isola2017image.html"
+    "Core": "core.html",
+    "Image-to-Image Translation with Conditional Adversarial Networks": "isola2017image.html",
+    "GANs Trained by a Two Time-Scale Update Rule Converge to a Local Nash Equilibrium": "heusel2017gans.html"
   }
 }
