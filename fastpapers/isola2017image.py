@@ -3,8 +3,8 @@
 __all__ = ['gen_bce_l1_loss', 'crit_bce_loss']
 
 # Cell
-from .core import *
-from fastai.data.external import untar_data, URLs
+
+from fastai.data.external import untar_data
 from fastai.data.transforms import get_image_files
 from fastai.data import *
 from fastai.basics import *
@@ -13,6 +13,7 @@ from fastai.vision.core import *
 from fastcore.all import *
 from fastai.vision.augment import *
 from fastai.vision.gan import *
+from .core import *
 
 # Cell
 def gen_bce_l1_loss(fake_pred, output, target, l1_weight=100):

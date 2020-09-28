@@ -14,11 +14,22 @@ index = {"explode_types": "00_core.ipynb",
          "CriticMetric": "00_core.ipynb",
          "l1": "00_core.ipynb",
          "GANLearner.show_results": "00_core.ipynb",
+         "URLs.FACADES": "00_core.ipynb",
+         "URLs.FACADES_BASE": "00_core.ipynb",
+         "URLs.FACADES_EXTENDED": "00_core.ipynb",
+         "URLs.CELEBA": "00_core.ipynb",
+         "download_file_from_google_drive": "00_core.ipynb",
+         "save_response_content": "00_core.ipynb",
          "gen_bce_l1_loss": "01_isola2017image.ipynb",
-         "crit_bce_loss": "01_isola2017image.ipynb"}
+         "crit_bce_loss": "01_isola2017image.ipynb",
+         "Identity": "02_heusel2017gans.ipynb",
+         "Inception": "02_heusel2017gans.ipynb",
+         "FIDMetric": "02_heusel2017gans.ipynb"}
 
 modules = ["core.py",
-           "isola2017image.py"]
+           "isola2017image.py",
+           "heusel2017gans.py",
+           "zhang2019self.py"]
 
 doc_url = "https://ababino.github.io/fastpapers/"
 
