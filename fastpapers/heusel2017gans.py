@@ -39,8 +39,9 @@ class Inception(nn.Module):
         return nn.Softmax(dim=1)(logits)
 
 # Cell
-class FIDMetric(Metric):
-    def __init__(self, model, dl):
+class FIDMetric(GenMetric):
+    def __init__(self, model, dl, get_prediction=noop):
+        self.get_prediction = get_prediction
         self.func = model
         if dl.device.type == 'cuda':
             self.func.cuda()
@@ -48,7 +49,7 @@ class FIDMetric(Metric):
         for b in progress_bar(dl):
             if isinstance(b, tuple):
                 if len(b)==2:
-                    b = b[1]
+                    b = self.get_prediction(b[1])
             total.append(self.func(b))
         total = torch.cat(total).cpu()
         self.dist_norm = total.mean(axis=0).pow(2).sum().sqrt()
@@ -58,7 +59,8 @@ class FIDMetric(Metric):
     def reset(self): self.total, self.count = [], 0
     def accumulate(self, learn):
         if learn.model.gen_mode:
-            self.total.append(learn.to_detach(self.func(learn.pred[1])))
+            pred = self.get_prediction(learn.pred)
+            self.total.append(learn.to_detach(self.func(pred)))
             self.count += 1
 
     @property
@@ -80,3 +82,6 @@ class FIDMetric(Metric):
         tcov_sqrt = np.trace(cov_sqrt)
         cov_loss = tcov1+tcov2-2*tcov_sqrt#np.trace(cov_sum - 2 * cov_sqrt)
         return mean_loss + cov_loss
+
+    @property
+    def name(self): return 'FID'
