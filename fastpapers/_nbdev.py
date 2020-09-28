@@ -28,8 +28,7 @@ index = {"explode_types": "00_core.ipynb",
 
 modules = ["core.py",
            "isola2017image.py",
-           "heusel2017gans.py",
-           "zhang2019self.py"]
+           "heusel2017gans.py"]
 
 doc_url = "https://ababino.github.io/fastpapers/"
 
