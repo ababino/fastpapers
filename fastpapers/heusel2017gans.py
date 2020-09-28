@@ -41,8 +41,9 @@ class Inception(nn.Module):
 # Cell
 class FIDMetric(Metric):
     def __init__(self, model, dl):
+        self.func = model
         if dl.device.type == 'cuda':
-            self.func = model.cuda()
+            self.func.cuda()
         total = []
         for b in progress_bar(dl):
             if isinstance(b, tuple):
