@@ -36,7 +36,7 @@ class Inception(nn.Module):
         x = Resize(299)(x)
         with torch.no_grad():
             logits = self.model(x)
-        return nn.Softmax(dim=1)(logits)
+        return logits#nn.Softmax(dim=1)(logits)
 
 # Cell
 class FIDMetric(GenMetric):
