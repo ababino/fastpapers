@@ -1,8 +1,8 @@
-# FastPapers
-> Implementation of papers algorithms compliant with fastai library.
+# Welcome to fastpapers
+> Play lego with papers
 
 
-This file will become your README and also the index of your documentation.
+`fastpapers` is a library developed using [nbdev](https://nbdev.fast.ai/). The goal is to reproduce paper results and be able to import the features that you want for your projecs. The implementations are done using [fastai](https://docs.fast.ai/).
 
 ## Install
 
@@ -10,7 +10,15 @@ This file will become your README and also the index of your documentation.
 
 ## How to use
 
-Fill me in please! Don't forget code examples:
+The name of each module is the [Bibtexkey](https://en.wikipedia.org/wiki/BibTeX#Field_types) of the corresponing paper.
+For example, if you want to use the FID metric from [Heusel, Martin, et al. 2017](http://papers.nips.cc/paper/7240-gans-trained-by-a-two-t), you can import it like so:
+
+```python
+from fastpapers.heusel2017gans import FIDMetric
+```
+
+The core module contains functions and classes that are useful for several papers.
+For example, you have a `ImageNTuple` to work with an arbitrary amount of images as input.
 
 ```python
 from fastai.data.external import untar_data,URLs
@@ -28,5 +36,18 @@ it.show();
 ```
 
 
-![png](docs/images/output_6_0.png)
+![png](docs/images/output_8_0.png)
+
+
+Or useful debugging functions like `explode_shapes` or `explode_ranges`
+
+```python
+explode_shapes(it)
+```
+
+
+
+
+    [(3, 224, 224), (3, 224, 224), (3, 224, 224)]
+
 
