@@ -17,7 +17,7 @@ For example, if you want to use the FID metric from [Heusel, Martin, et al. 2017
 from fastpapers.heusel2017gans import FIDMetric
 ```
 
-The core module contains functions and classes that are useful for several papers.
+The `core` module contains functions and classes that are useful for several papers.
 For example, you have a `ImageNTuple` to work with an arbitrary amount of images as input.
 
 ```python

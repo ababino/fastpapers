@@ -35,8 +35,7 @@ class Inception(nn.Module):
     def __call__(self, x):
         x = Resize(299)(x)
         with torch.no_grad():
-            logits = self.model(x)
-        return logits#nn.Softmax(dim=1)(logits)
+            return self.model(x)
 
 # Cell
 class FIDMetric(GenMetric):
@@ -53,7 +52,7 @@ class FIDMetric(GenMetric):
             total.append(self.func(b))
         total = torch.cat(total).cpu()
         self.dist_norm = total.mean(axis=0).pow(2).sum().sqrt()
-        total = total / self.dist_norm
+        #total = total / self.dist_norm
         self.dist_mean = total.mean(axis=0)
         self.dist_cov = (total-self.dist_mean).T@(total-self.dist_mean)/total.shape[0]
     def reset(self): self.total, self.count = [], 0
@@ -66,7 +65,7 @@ class FIDMetric(GenMetric):
     @property
     def value(self):
         if self.count == 0: return None
-        total = torch.cat(self.total).cpu()/self.dist_norm
+        total = torch.cat(self.total).cpu()#/self.dist_norm
         self.sample_mean = total.mean(axis=0).cpu()
         self.sample_cov = (total-self.sample_mean).T@(total-self.sample_mean)/total.shape[0]
         self.sample_cov = self.sample_cov.cpu()
