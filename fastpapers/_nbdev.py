@@ -20,9 +20,9 @@ index = {"explode_types": "00_core.ipynb",
          "URLs.CELEBA": "00_core.ipynb",
          "download_file_from_google_drive": "00_core.ipynb",
          "save_response_content": "00_core.ipynb",
+         "FID_WEIGHTS_URL": "00_core.ipynb",
          "gen_bce_l1_loss": "01_isola2017image.ipynb",
          "crit_bce_loss": "01_isola2017image.ipynb",
-         "Identity": "02_heusel2017gans.ipynb",
          "Inception": "02_heusel2017gans.ipynb",
          "FIDMetric": "02_heusel2017gans.ipynb"}
 

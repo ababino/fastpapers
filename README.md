@@ -2,7 +2,7 @@
 > Play lego with papers
 
 
-`fastpapers` is a library developed using [nbdev](https://nbdev.fast.ai/). The goal is to reproduce paper results and be able to import the features that you want for your projecs. The implementations are done using [fastai](https://docs.fast.ai/).
+`fastpapers` is a python library to reproduce papers in [Jupyter Notebooks](https://jupyter.org/). Thanks to [nbdev](https://nbdev.fast.ai/), we turn these notebooks into modules. With this library you can import your favorite feature from your favorite paper. The implementations are done using [fastai](https://docs.fast.ai/).
 
 ## Install
 
@@ -21,9 +21,6 @@ The `core` module contains functions and classes that are useful for several pap
 For example, you have a `ImageNTuple` to work with an arbitrary amount of images as input.
 
 ```python
-from fastai.data.external import untar_data,URLs
-from fastai.data.transforms import get_image_files
-from fastai.vision.augment import Resize, ToTensor
 path = untar_data(URLs.PETS)
 files = get_image_files(path/"images")
 ```

@@ -31,7 +31,7 @@ nb_path: "index.ipynb"
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><code>fastpapers</code> is a library developed using <a href="https://nbdev.fast.ai/">nbdev</a>. The goal is to reproduce paper results and be able to import the features that you want for your projecs. The implementations are done using <a href="https://docs.fast.ai/">fastai</a>.</p>
+<p><code>fastpapers</code> is a python library to reproduce papers in <a href="https://jupyter.org/">Jupyter Notebooks</a>. Thanks to <a href="https://nbdev.fast.ai/">nbdev</a>, we turn these notebooks into modules. With this library you can import your favorite feature from your favorite paper. The implementations are done using <a href="https://docs.fast.ai/">fastai</a>.</p>
 
 </div>
 </div>
@@ -95,10 +95,7 @@ For example, you have a <a href="/fastpapers/core.html#ImageNTuple"><code>ImageN
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">fastai.data.external</span> <span class="kn">import</span> <span class="n">untar_data</span><span class="p">,</span><span class="n">URLs</span>
-<span class="kn">from</span> <span class="nn">fastai.data.transforms</span> <span class="kn">import</span> <span class="n">get_image_files</span>
-<span class="kn">from</span> <span class="nn">fastai.vision.augment</span> <span class="kn">import</span> <span class="n">Resize</span><span class="p">,</span> <span class="n">ToTensor</span>
-<span class="n">path</span> <span class="o">=</span> <span class="n">untar_data</span><span class="p">(</span><span class="n">URLs</span><span class="o">.</span><span class="n">PETS</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="n">untar_data</span><span class="p">(</span><span class="n">URLs</span><span class="o">.</span><span class="n">PETS</span><span class="p">)</span>
 <span class="n">files</span> <span class="o">=</span> <span class="n">get_image_files</span><span class="p">(</span><span class="n">path</span><span class="o">/</span><span class="s2">&quot;images&quot;</span><span class="p">)</span>
 </pre></div>
 

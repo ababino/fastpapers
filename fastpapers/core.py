@@ -2,7 +2,7 @@
 
 __all__ = ['explode_types', 'explode_lens', 'explode_shapes', 'explode_ranges', 'ImageNTuple', 'ImageTupleBlock',
            'ConditionalGenerator', 'SiameseCritic', 'GenMetric', 'CriticMetric', 'l1', 'l1',
-           'download_file_from_google_drive', 'save_response_content']
+           'download_file_from_google_drive', 'save_response_content', 'FID_WEIGHTS_URL']
 
 # Cell
 import requests
@@ -149,3 +149,6 @@ def save_response_content(response, destination):
         for chunk in response.iter_content(CHUNK_SIZE):
             if chunk: # filter out keep-alive new chunks
                 f.write(chunk)
+
+# Cell
+FID_WEIGHTS_URL = 'https://github.com/mseitzer/pytorch-fid/releases/download/fid_weights/pt_inception-2015-12-05-6726825d.pth'
