@@ -17,6 +17,7 @@ from fastcore.all import *
 from fastai.vision.augment import *
 from fastai.vision.gan import *
 from .core import *
+import torch.nn.functional as F
 
 # Cell
 class Inception(nn.Module):
@@ -33,7 +34,8 @@ class Inception(nn.Module):
         model.dropout = Identity()
         self.model = model
     def __call__(self, x):
-        x = Resize(299, method=ResizeMethod.Squish)(x)
+        if min(x.shape[-2:])<299:
+            x = F.interpolate(x, size=299)
         with torch.no_grad():
             return self.model(x)
 
