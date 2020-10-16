@@ -26,6 +26,13 @@ index = {"explode_types": "00_core.ipynb",
          "download_file_from_google_drive": "00_core.ipynb",
          "save_response_content": "00_core.ipynb",
          "FID_WEIGHTS_URL": "00_core.ipynb",
+         "renorm_stats": "00_core.ipynb",
+         "Path.is_relative_to": "00_core.ipynb",
+         "get_tuple_files_by_stem": "00_core.ipynb",
+         "ParentsSplitter": "00_core.ipynb",
+         "CGANDataLoaders": "00_core.ipynb",
+         "GeneratorLoss": "01_isola2017image.ipynb",
+         "GeneratorBCE": "01_isola2017image.ipynb",
          "gen_bce_l1_loss": "01_isola2017image.ipynb",
          "gen_bce_loss": "01_isola2017image.ipynb",
          "crit_bce_loss": "01_isola2017image.ipynb",
@@ -34,12 +41,21 @@ index = {"explode_types": "00_core.ipynb",
          "Patch70": "01_isola2017image.ipynb",
          "UnetUpsample": "01_isola2017image.ipynb",
          "CGenerator": "01_isola2017image.ipynb",
+         "GANLearner.predict": "01_isola2017image.ipynb",
+         "pix2pix_learner": "01_isola2017image.ipynb",
          "Inception": "02_heusel2017gans.ipynb",
-         "FIDMetric": "02_heusel2017gans.ipynb"}
+         "FIDMetric": "02_heusel2017gans.ipynb",
+         "vgg16": "03_johnson2016perceptual.ipynb",
+         "vgg16name2key": "03_johnson2016perceptual.ipynb",
+         "PerceptualLoss": "03_johnson2016perceptual.ipynb",
+         "JohnsonResBlock": "03_johnson2016perceptual.ipynb",
+         "ResnetGenerator": "03_johnson2016perceptual.ipynb",
+         "ResImageBlock": "03_johnson2016perceptual.ipynb"}
 
 modules = ["core.py",
            "isola2017image.py",
-           "heusel2017gans.py"]
+           "heusel2017gans.py",
+           "johnson2016perceptual.py"]
 
 doc_url = "https://ababino.github.io/fastpapers/"
 

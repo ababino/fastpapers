@@ -3,7 +3,7 @@
 __all__ = ['explode_types', 'explode_lens', 'explode_shapes', 'explode_ranges', 'pexpt', 'pexpl', 'pexps',
            'receptive_fields', 'ImageNTuple', 'ImageTupleBlock', 'ConditionalGenerator', 'SiameseCritic', 'GenMetric',
            'CriticMetric', 'l1', 'l1', 'ProgressImage', 'download_file_from_google_drive', 'save_response_content',
-           'FID_WEIGHTS_URL']
+           'FID_WEIGHTS_URL', 'renorm_stats', 'get_tuple_files_by_stem', 'ParentsSplitter', 'CGANDataLoaders']
 
 # Cell
 import requests
@@ -53,14 +53,15 @@ def pexps(o): print(explode_shapes(o))
 # Cell
 def receptive_fields(model, nf, imsize, bs=64):
     '''returns the size of the receptive field for each feature output.'''
-    x = dummy_eval(model, imsize).detach()
-    outsz = x.shape[-2:]
+    # init parameters
     for p in model.named_parameters():
         if 'weight' in p[0]:
             n = p[1].shape[1] if len(p[1].shape)==4 else 1
             nn.init.constant_(p[1], 1./n)
         elif 'bias' in p[0]:
             nn.init.constant_(p[1], 0)
+    x = dummy_eval(model, imsize).detach()
+    outsz = x.shape[-2:]
 
     with torch.no_grad():
         rfs = []
@@ -78,6 +79,7 @@ def receptive_fields(model, nf, imsize, bs=64):
 
 # Cell
 class ImageNTuple(fastuple):
+
     @classmethod
     def create(cls, fns): return cls(tuple(PILImage.create(f) for f in fns))
 
@@ -93,10 +95,15 @@ class ImageNTuple(fastuple):
         for item in self: item.requires_grad_(value)
         return self
 
-    def detach(self):
-        for item in self: item.detach()
-        return self
-
+    @property
+    def shape(self):
+        all_tensors = all([isinstance(t, Tensor) for t in self])
+        same_shape = all([self[0].shape==t.shape for t in self[1:]])
+        if not all_tensors or not same_shape: raise AttributeError
+        return self[0].shape
+    #def detach(self):
+    #    for item in self: item.detach()
+    #    return self
 
 # Cell
 def ImageTupleBlock():
@@ -143,6 +150,7 @@ l1 = GenMetric(l1)
 
 # Cell
 class ProgressImage(Callback):
+    run_after = GANTrainer
     @delegates(show_image)
     def __init__(self, out_widget, save_img=False, folder='pred_imgs', conditional=False, **kwargs):
         self.out_widget = out_widget
@@ -151,17 +159,14 @@ class ProgressImage(Callback):
         self.folder = folder
         self.conditional = conditional
         if self.conditional:
-            self.title = 'input/real/fake'
+            self.title = 'Input-Real-Fake'
         else:
-            self.title = 'generated'
+            self.title = 'Generated'
         Path(self.folder).mkdir(exist_ok=True)
-    def before_fit(self):
-        with self.out_widget:
-            self.fig, self.ax = plt.subplots()
-            self.ax.axis('off')
+        self.ax = None
     def before_batch(self):
         if self.gan_trainer.gen_mode and self.training: self.last_gen_target = self.learn.yb[0][-1]
-    def after_epoch(self):
+    def after_train(self):
         "Show a sample image."
         if not hasattr(self.learn.gan_trainer, 'last_gen'): return
         b = self.learn.gan_trainer.last_gen
@@ -172,10 +177,12 @@ class ProgressImage(Callback):
             imt = ToTensor()(ImageNTuple.create((imt[0], gt, imt[-1])))
         self.out_widget.clear_output(wait=True)
         with self.out_widget:
-            self.ax.clear()
-            imt.show(ax=self.ax, title=self.title, **self.kwargs)
-            display(self.fig)
-        if self.save_img: self.fig.savefig(self.path / f'{self.folder}/pred_epoch_{self.epoch}.png')
+            if self.ax: self.ax.clear()
+            self.ax = imt.show(ax=self.ax, title=self.title, **self.kwargs)
+            display(self.ax.figure)
+        if self.save_img: self.ax.figure.savefig(self.path / f'{self.folder}/pred_epoch_{self.epoch}.png')
+    def after_fit(self):
+        plt.close(self.ax.figure)
 
 # Cell
 @typedispatch
@@ -234,3 +241,75 @@ def save_response_content(response, destination):
 
 # Cell
 FID_WEIGHTS_URL = 'https://github.com/mseitzer/pytorch-fid/releases/download/fid_weights/pt_inception-2015-12-05-6726825d.pth'
+
+# Cell
+renorm_stats = (2*torch.tensor(imagenet_stats[0])-1).tolist(), (2*torch.tensor(imagenet_stats[1])).tolist()
+
+# Cell
+@patch
+def is_relative_to(self:Path, *other):
+    """Return True if the path is relative to another path or False.
+    """
+    try:
+        self.relative_to(*other)
+        return True
+    except ValueError:
+        return False
+
+# Cell
+def _parent_idxs(items, name):
+    def _inner(items, name): return mask2idxs(Path(o).parent.name == name for o in items)
+    return [i for n in L(name) for i in _inner(items,n)]
+
+@delegates(get_image_files)
+def get_tuple_files_by_stem(paths, folders=None, **kwargs):
+    if not is_listy(paths): paths = [paths]
+    files = []
+    for path in paths: files.extend(get_image_files(path, folders=folders))
+    out = L(groupby(files, attrgetter('stem')).values())
+    return out
+
+def ParentsSplitter(train_name='train', valid_name='valid'):
+    "Split `items` from the grand parent folder names (`train_name` and `valid_name`)."
+    def _inner(o):
+        tindex = _parent_idxs(L(o).itemgot(-1), train_name)
+        vindex = _parent_idxs(L(o).itemgot(-1), valid_name)
+        return tindex, vindex
+    return _inner
+
+class CGANDataLoaders(DataLoaders):
+    "Basic wrapper around several `DataLoader`s with factory methods for CGAN problems"
+    @classmethod
+    @delegates(DataLoaders.from_dblock)
+    def from_paths(cls, input_path, target_path, train='train', valid='valid', valid_pct=None, seed=None, vocab=None, item_tfms=None,
+                  batch_tfms=None, n_inp=1, **kwargs):
+        "Create from imagenet style dataset in `path` with `train` and `valid` subfolders (or provide `valid_pct`)"
+        splitter = ParentsSplitter(train_name=train, valid_name=valid) if valid_pct is None else RandomSplitter(valid_pct, seed=seed)
+        get_items = get_tuple_files_by_stem if valid_pct else partial(get_tuple_files_by_stem, folders=[train, valid])
+        get_x=lambda o: L(o).filter(Self.is_relative_to(input_path))#[0]
+        #if n_inp == 1: get_x = lambda x: get_x(x)[0]
+        input_block = ImageBlock if n_inp==1 else ImageTupleBlock
+        dblock = DataBlock(blocks=(ImageTupleBlock, ImageTupleBlock),
+                           get_items=get_items,
+                           splitter=splitter,
+                           get_x=get_x,#lambda o: L(o).filter(lambda x: x.is_relative_to(input_path))[0],
+                           #get_x=lambda o: L(o).filter(lambda x: x.parent.parent==input_path)[0],
+                           item_tfms=item_tfms,
+                           batch_tfms=batch_tfms)
+        return cls.from_dblock(dblock, [input_path, target_path], **kwargs)
+
+    @classmethod
+    @delegates(DataLoaders.from_dblock)
+    def from_path_ext(cls, path, folders, input_ext='.png', output_ext='.jpg', valid_pct=0.2, seed=None, item_tfms=None,
+                      batch_tfms=None, **kwargs):
+        "Create from list of `fnames` in `path`s with `label_func`"
+        get_itmes = partial(get_tuple_files_by_stem, folders=folders)
+        files = get_itmes(path)
+        dblock = DataBlock(blocks=(ImageBlock, ImageTupleBlock),
+                           get_items=get_itmes,
+                           splitter=RandomSplitter(valid_pct, seed=seed),
+                           get_x=lambda o: L(o).filter(lambda x: x.suffix==input_ext)[0],
+                           get_y=lambda o: L(o).sorted(key=lambda x: {input_ext:0, output_ext:1}[x.suffix]),
+                           item_tfms=item_tfms,
+                           batch_tfms=batch_tfms)
+        return cls.from_dblock(dblock, path, **kwargs)

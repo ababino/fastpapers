@@ -19,6 +19,9 @@ entries:
       title: GANs Trained by a Two Time-Scale Update Rule Converge to a Local Nash
         Equilibrium
       url: heusel2017gans.html
+    - output: web,pdf
+      title: Perceptual losses for real-time style transfer and super-resolution
+      url: johnson2016perceptual.html
     output: web
     title: fastpapers
   output: web

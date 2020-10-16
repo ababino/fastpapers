@@ -6,8 +6,8 @@ title: Welcome to fastpapers
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "Play lego with papers"
-description: "Play lego with papers"
+summary: "Play LEGO with papers."
+description: "Play LEGO with papers."
 nb_path: "index.ipynb"
 ---
 <!--
@@ -31,7 +31,7 @@ nb_path: "index.ipynb"
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><code>fastpapers</code> is a python library to reproduce papers in <a href="https://jupyter.org/">Jupyter Notebooks</a>. Thanks to <a href="https://nbdev.fast.ai/">nbdev</a>, we turn these notebooks into modules. With this library you can import your favorite feature from your favorite paper. The implementations are done using <a href="https://docs.fast.ai/">fastai</a>.</p>
+<p><code>fastpapers</code> is a python library where we reproduce papers on <a href="https://jupyter.org/">Jupyter Notebooks</a>. We use <a href="https://nbdev.fast.ai/">nbdev</a> to turn these notebooks into modules. The implementations are done using <a href="https://docs.fast.ai/">fastai</a>.</p>
 
 </div>
 </div>
@@ -71,6 +71,30 @@ For example, if you want to use the FID metric from <a href="http://papers.nips.
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">fastpapers.heusel2017gans</span> <span class="kn">import</span> <span class="n">FIDMetric</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>If you want to train a pix2pix model from Isola, <a href="https://openaccess.thecvf.com/content_cvpr_2017/papers/Isola_Image-To-Image_Translation_With_CVPR_2017_paper.pdf">Phillip, et al</a> you can import a pix2pix_learner</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">fastpapers.isola2017image</span> <span class="kn">import</span> <span class="n">pix2pix_learner</span>
 </pre></div>
 
     </div>
@@ -146,7 +170,7 @@ For example, you have a <a href="/fastpapers/core.html#ImageNTuple"><code>ImageN
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Or useful debugging functions like <a href="/fastpapers/core.html#explode_shapes"><code>explode_shapes</code></a> or <a href="/fastpapers/core.html#explode_ranges"><code>explode_ranges</code></a></p>
+<p>Or useful functions for debuging like <a href="/fastpapers/core.html#explode_shapes"><code>explode_shapes</code></a> or <a href="/fastpapers/core.html#explode_ranges"><code>explode_ranges</code></a></p>
 
 </div>
 </div>
