@@ -24,7 +24,7 @@ from .core import *
 import torch.nn.functional as F
 
 # Cell
-vgg16 = torch.hub.load('pytorch/vision:v0.6.0', 'vgg16', pretrained=True).features
+vgg16 = torch.hub.load('pytorch/vision:v0.6.0', 'vgg16', pretrained=False).features
 c, i, j =0, 0, 1
 vgg16name2key = {}
 for k, l in vgg16._modules.items():
