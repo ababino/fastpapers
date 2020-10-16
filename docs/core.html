@@ -46,26 +46,6 @@ nb_path: "00_core.ipynb"
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">explode_types</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;Like fastcore explode_types, but only shows __name__ of type.&#39;&#39;&#39;</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_listy</span><span class="p">(</span><span class="n">o</span><span class="p">):</span> <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">o</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
-    <span class="k">return</span> <span class="p">{</span><span class="nb">type</span><span class="p">(</span><span class="n">o</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span> <span class="p">[</span><span class="n">explode_types</span><span class="p">(</span><span class="n">o_</span><span class="p">)</span> <span class="k">for</span> <span class="n">o_</span> <span class="ow">in</span> <span class="n">o</span><span class="p">]}</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
 
 <div class="output_wrapper">
 <div class="output">
@@ -95,11 +75,10 @@ nb_path: "00_core.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">explode_lens</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">is_listy</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">is_listy</span><span class="p">(</span><span class="n">o_</span><span class="p">)</span> <span class="k">for</span> <span class="n">o_</span> <span class="ow">in</span> <span class="n">o</span><span class="p">):</span>
-            <span class="k">return</span> <span class="p">[</span><span class="n">explode_lens</span><span class="p">(</span><span class="n">o_</span><span class="p">)</span> <span class="k">for</span> <span class="n">o_</span> <span class="ow">in</span> <span class="n">o</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">explode_types</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Like fastcore explode_types, but only shows __name__ of type.&#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_listy</span><span class="p">(</span><span class="n">o</span><span class="p">):</span> <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">o</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span>
+    <span class="k">return</span> <span class="p">{</span><span class="nb">type</span><span class="p">(</span><span class="n">o</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span> <span class="p">[</span><span class="n">explode_types</span><span class="p">(</span><span class="n">o_</span><span class="p">)</span> <span class="k">for</span> <span class="n">o_</span> <span class="ow">in</span> <span class="n">o</span><span class="p">]}</span>
 </pre></div>
 
     </div>
@@ -140,7 +119,11 @@ nb_path: "00_core.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_eq</span><span class="p">(</span><span class="n">explode_lens</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="p">[[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">]]]),</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">explode_lens</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">is_listy</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">is_listy</span><span class="p">(</span><span class="n">o_</span><span class="p">)</span> <span class="k">for</span> <span class="n">o_</span> <span class="ow">in</span> <span class="n">o</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">explode_lens</span><span class="p">(</span><span class="n">o_</span><span class="p">)</span> <span class="k">for</span> <span class="n">o_</span> <span class="ow">in</span> <span class="n">o</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -157,9 +140,7 @@ nb_path: "00_core.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">explode_shapes</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_listy</span><span class="p">(</span><span class="n">o</span><span class="p">):</span> <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">bind</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">arg0</span><span class="p">,</span> <span class="s1">&#39;shape&#39;</span><span class="p">)(</span><span class="n">o</span><span class="p">))</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">explode_shapes</span><span class="p">(</span><span class="n">o_</span><span class="p">)</span> <span class="k">for</span> <span class="n">o_</span> <span class="ow">in</span> <span class="n">o</span><span class="p">]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_eq</span><span class="p">(</span><span class="n">explode_lens</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="p">[[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">]]]),</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
 </pre></div>
 
     </div>
@@ -200,7 +181,9 @@ nb_path: "00_core.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_eq</span><span class="p">(</span><span class="n">explode_shapes</span><span class="p">([</span><span class="n">tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">]),</span> <span class="p">[</span><span class="n">tensor</span><span class="p">([[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],[</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">]]),</span> <span class="n">tensor</span><span class="p">([</span><span class="mi">6</span><span class="p">])]]),</span> <span class="p">[(</span><span class="mi">2</span><span class="p">,),</span> <span class="p">[(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)]])</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">explode_shapes</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_listy</span><span class="p">(</span><span class="n">o</span><span class="p">):</span> <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">bind</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">arg0</span><span class="p">,</span> <span class="s1">&#39;shape&#39;</span><span class="p">)(</span><span class="n">o</span><span class="p">))</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">explode_shapes</span><span class="p">(</span><span class="n">o_</span><span class="p">)</span> <span class="k">for</span> <span class="n">o_</span> <span class="ow">in</span> <span class="n">o</span><span class="p">]</span>
 </pre></div>
 
     </div>
@@ -217,9 +200,7 @@ nb_path: "00_core.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">explode_ranges</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_listy</span><span class="p">(</span><span class="n">o</span><span class="p">):</span> <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">o</span><span class="o">.</span><span class="n">min</span><span class="p">()),</span> <span class="nb">float</span><span class="p">(</span><span class="n">o</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
-    <span class="k">return</span> <span class="p">[</span><span class="n">explode_ranges</span><span class="p">(</span><span class="n">o_</span><span class="p">)</span> <span class="k">for</span> <span class="n">o_</span> <span class="ow">in</span> <span class="n">o</span><span class="p">]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_eq</span><span class="p">(</span><span class="n">explode_shapes</span><span class="p">([</span><span class="n">tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">]),</span> <span class="p">[</span><span class="n">tensor</span><span class="p">([[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">],[</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">]]),</span> <span class="n">tensor</span><span class="p">([</span><span class="mi">6</span><span class="p">])]]),</span> <span class="p">[(</span><span class="mi">2</span><span class="p">,),</span> <span class="p">[(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)]])</span>
 </pre></div>
 
     </div>
@@ -247,6 +228,25 @@ nb_path: "00_core.ipynb"
 
 </div>
 
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">explode_ranges</span><span class="p">(</span><span class="n">o</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_listy</span><span class="p">(</span><span class="n">o</span><span class="p">):</span> <span class="k">return</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">o</span><span class="o">.</span><span class="n">min</span><span class="p">()),</span> <span class="nb">float</span><span class="p">(</span><span class="n">o</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">explode_ranges</span><span class="p">(</span><span class="n">o_</span><span class="p">)</span> <span class="k">for</span> <span class="n">o_</span> <span class="ow">in</span> <span class="n">o</span><span class="p">]</span>
+</pre></div>
+
+    </div>
 </div>
 </div>
 
@@ -289,23 +289,6 @@ nb_path: "00_core.ipynb"
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">pexpt</span><span class="p">(</span><span class="n">o</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="n">explode_types</span><span class="p">(</span><span class="n">o</span><span class="p">))</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
 
 <div class="output_wrapper">
 <div class="output">
@@ -334,7 +317,7 @@ nb_path: "00_core.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">pexpl</span><span class="p">(</span><span class="n">o</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="n">explode_lens</span><span class="p">(</span><span class="n">o</span><span class="p">))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">pexpt</span><span class="p">(</span><span class="n">o</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="n">explode_types</span><span class="p">(</span><span class="n">o</span><span class="p">))</span>
 </pre></div>
 
     </div>
@@ -375,7 +358,7 @@ nb_path: "00_core.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">pexps</span><span class="p">(</span><span class="n">o</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="n">explode_shapes</span><span class="p">(</span><span class="n">o</span><span class="p">))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">pexpl</span><span class="p">(</span><span class="n">o</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="n">explode_lens</span><span class="p">(</span><span class="n">o</span><span class="p">))</span>
 </pre></div>
 
     </div>
@@ -412,6 +395,16 @@ nb_path: "00_core.ipynb"
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">pexps</span><span class="p">(</span><span class="n">o</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="n">explode_shapes</span><span class="p">(</span><span class="n">o</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
 
 </div>
     {% endraw %}
@@ -441,13 +434,6 @@ nb_path: "00_core.ipynb"
 </div>
     {% endraw %}
 
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="N-Images-Classes">N Images Classes<a class="anchor-link" href="#N-Images-Classes"> </a></h2><p>These are classes to handle many images to many images generation</p>
-
-</div>
-</div>
-</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -455,6 +441,13 @@ nb_path: "00_core.ipynb"
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="N-Images-Classes">N Images Classes<a class="anchor-link" href="#N-Images-Classes"> </a></h2><p>These are classes to handle many images to many images generation</p>
+
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -476,6 +469,13 @@ nb_path: "00_core.ipynb"
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -637,13 +637,6 @@ nb_path: "00_core.ipynb"
     
 <div class="cell border-box-sizing code_cell rendered">
 
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
 <div class="output_wrapper">
 <div class="output">
 
@@ -665,12 +658,6 @@ nb_path: "00_core.ipynb"
 </div>
     {% endraw %}
 
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Conditional-Generator">Conditional Generator<a class="anchor-link" href="#Conditional-Generator"> </a></h2>
-</div>
-</div>
-</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -678,6 +665,12 @@ nb_path: "00_core.ipynb"
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Conditional-Generator">Conditional Generator<a class="anchor-link" href="#Conditional-Generator"> </a></h2>
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -699,6 +692,13 @@ nb_path: "00_core.ipynb"
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -855,13 +855,6 @@ nb_path: "00_core.ipynb"
     
 <div class="cell border-box-sizing code_cell rendered">
 
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
 <div class="output_wrapper">
 <div class="output">
 
@@ -879,6 +872,13 @@ nb_path: "00_core.ipynb"
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -908,13 +908,6 @@ nb_path: "00_core.ipynb"
 </div>
 </div>
 </div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -990,13 +983,20 @@ nb_path: "00_core.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="GenMetric object at 0x7f3eebd8f5e0>" class="doc_header"><code>GenMetric object at 0x7f3eebd8f5e0></code><a href="" class="source_link" style="float:right">[source]</a></h4>
+<h4 id="GenMetric object at 0x7ff84ff9e5e0>" class="doc_header"><code>GenMetric object at 0x7ff84ff9e5e0></code><a href="" class="source_link" style="float:right">[source]</a></h4>
 </div>
 
 </div>
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -1008,13 +1008,6 @@ nb_path: "00_core.ipynb"
 </div>
 </div>
 </div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -1036,6 +1029,13 @@ nb_path: "00_core.ipynb"
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -1064,13 +1064,6 @@ nb_path: "00_core.ipynb"
     
 <div class="cell border-box-sizing code_cell rendered">
 
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
 <div class="output_wrapper">
 <div class="output">
 
@@ -1088,6 +1081,13 @@ nb_path: "00_core.ipynb"
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -1127,13 +1127,6 @@ nb_path: "00_core.ipynb"
 </div>
 </div>
 </div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -1185,6 +1178,13 @@ nb_path: "00_core.ipynb"
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -1257,13 +1257,6 @@ nb_path: "00_core.ipynb"
 </div>
 </div>
 </div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -1366,6 +1359,13 @@ nb_path: "00_core.ipynb"
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}

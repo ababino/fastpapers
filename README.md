@@ -6,7 +6,7 @@
 
 ## Install
 
-`pip install your_project_name`
+`pip install fastpapers`
 
 ## How to use
 
