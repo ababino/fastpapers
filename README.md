@@ -2,7 +2,7 @@
 > Play LEGO with papers.
 
 
-`fastpapers` is a python library where we reproduce papers on [Jupyter Notebooks](https://jupyter.org/). We use [nbdev](https://nbdev.fast.ai/) to turn these notebooks into modules. The implementations are done using [fastai](https://docs.fast.ai/).
+`fastpapers` is a python library where I reproduce papers on [Jupyter Notebooks](https://jupyter.org/). I use [nbdev](https://nbdev.fast.ai/) to turn these notebooks into modules. The implementations are done using [fastai](https://docs.fast.ai/). This a personal project that I use to learn and it is not a serious library... so far. Wouldn't be nice this to be a scientific journal someday?
 
 ## Install
 

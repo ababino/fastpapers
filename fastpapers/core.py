@@ -3,7 +3,8 @@
 __all__ = ['explode_types', 'explode_lens', 'explode_shapes', 'explode_ranges', 'pexpt', 'pexpl', 'pexps',
            'receptive_fields', 'ImageNTuple', 'ImageTupleBlock', 'ConditionalGenerator', 'SiameseCritic', 'GenMetric',
            'CriticMetric', 'l1', 'l1', 'ProgressImage', 'download_file_from_google_drive', 'save_response_content',
-           'FID_WEIGHTS_URL', 'renorm_stats', 'get_tuple_files_by_stem', 'ParentsSplitter', 'CGANDataLoaders']
+           'FID_WEIGHTS_URL', 'renorm_stats', 'get_tuple_files_by_stem', 'ParentsSplitter', 'CGANDataLoaders',
+           'GatherLogs']
 
 # Cell
 import requests
@@ -17,6 +18,8 @@ from fastai.vision.models.all import *
 from fastai.vision.augment import *
 from fastai.callback.hook import *
 from fastai.vision.widgets import *
+import pandas as pd
+import seaborn as sns
 
 # Cell
 def explode_types(o):
@@ -165,16 +168,19 @@ class ProgressImage(Callback):
         Path(self.folder).mkdir(exist_ok=True)
         self.ax = None
     def before_batch(self):
-        if self.gan_trainer.gen_mode and self.training: self.last_gen_target = self.learn.yb[0][-1]
+        if self.gan_trainer.gen_mode and self.training: self.last_gen_target = self.learn.yb#[0][-1]
     def after_train(self):
         "Show a sample image."
         if not hasattr(self.learn.gan_trainer, 'last_gen'): return
         b = self.learn.gan_trainer.last_gen
         gt = self.last_gen_target
-        gt, b = self.learn.dls.decode((gt, b))
+        #gt, b = self.learn.dls.decode((gt, b))
+        b = self.learn.dls.decode((b,))
+        gt = self.learn.dls.decode(gt)
         gt, imt = batch_to_samples((gt, b), max_n=1)[0]
+        gt, imt = gt[0][-1], imt[0]
         if self.conditional:
-            imt = ToTensor()(ImageNTuple.create((imt[0], gt, imt[-1])))
+            imt = ToTensor()(ImageNTuple.create((*imt[:-1], gt, imt[-1])))
         self.out_widget.clear_output(wait=True)
         with self.out_widget:
             if self.ax: self.ax.clear()
@@ -313,3 +319,25 @@ class CGANDataLoaders(DataLoaders):
                            item_tfms=item_tfms,
                            batch_tfms=batch_tfms)
         return cls.from_dblock(dblock, path, **kwargs)
+
+# Cell
+class GatherLogs(Callback):
+    def __init__(self):
+        self.experiment='experiment'
+        self.df = None
+    def set_name(self, name):
+        self.experiment = name
+    def after_fit(self):
+        columns=self.recorder.metric_names[:-1] + 'experiment'
+        values = L(self.recorder.values).map(add(self.experiment))
+        values = L(range_of(values)).map_zipwith(add, values)
+        df = pd.DataFrame(values, columns=columns)
+        self.df = pd.concat([self.df, df]).reset_index(drop=True)
+    @delegates(plt.subplots)
+    def plot(self, name, **kwargs):
+        fig, axs = plt.subplots(ncols=2, **kwargs)
+        sns.lineplot(data=self.df, x='epoch', y='train_'+name, hue='experiment', ax=axs[0])
+        sns.lineplot(data=self.df, x='epoch', y='valid_'+name, hue='experiment', ax=axs[1])
+        axs[0].set_title('Train')
+        axs[1].set_title('Validation')
+        return fig, axs

@@ -22,6 +22,9 @@ entries:
     - output: web,pdf
       title: Perceptual losses for real-time style transfer and super-resolution
       url: johnson2016perceptual.html
+    - output: web,pdf
+      title: End-to-End Object Detection with Transformers
+      url: carion2020end.html
     output: web
     title: fastpapers
   output: web

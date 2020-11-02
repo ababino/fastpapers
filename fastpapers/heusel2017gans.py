@@ -23,7 +23,8 @@ import torch.nn.functional as F
 class Inception(nn.Module):
     def __init__(self, weights='new', renormalize=False):
         super().__init__()
-        self.renormalize = renormalize
+        #self.renormalize = renormalize
+        self.renorm_func = Normalize.from_stats(*renorm_stats) if renormalize else noop
         if weights=='new':
             model = torch.hub.load('pytorch/vision:v0.6.0', 'inception_v3', pretrained=True)
         elif weights=='old':
@@ -37,8 +38,7 @@ class Inception(nn.Module):
     def __call__(self, x):
         if min(x.shape[-2:])<299:
             x = F.interpolate(x, size=299)
-        if self.renormalize:
-            x = Normalize.from_stats(*imagenet_stats)((x+1)/2)
+        x = self.renorm_func(x)
         with torch.no_grad():
             return self.model(x)
 
@@ -54,7 +54,7 @@ class FIDMetric(GenMetric):
             if isinstance(b, tuple):
                 if len(b)==2:
                     b = b[1]
-            b = b[-1] if is_listy(b) else b#self.get_prediction(b)
+            b = b[-1] if is_listy(b) else b
             total.append(self.func(b))
         total = torch.cat(total).cpu()
         self.dist_norm = total.mean(axis=0).pow(2).sum().sqrt()
@@ -63,7 +63,7 @@ class FIDMetric(GenMetric):
     def reset(self): self.total, self.count = [], 0
     def accumulate(self, learn):
         if learn.model.gen_mode:
-            pred =  learn.pred[-1] if is_listy(learn.pred) else learn.pred#self.get_prediction(learn.pred)
+            pred =  learn.pred[-1] if is_listy(learn.pred) else learn.pred
             self.total.append(learn.to_detach(self.func(pred)))
             self.count += 1
 
