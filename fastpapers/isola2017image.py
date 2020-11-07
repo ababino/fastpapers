@@ -8,16 +8,11 @@ from fastai.data.external import untar_data
 from fastai.data.transforms import get_image_files
 from fastai.data import *
 from fastai.basics import *
-from fastai.vision.data import *
-from fastai.vision.core import *
+from fastai.vision.all import *
 from fastcore.all import *
-from fastai.vision.augment import *
 from fastai.vision.gan import *
-from fastai.vision.models import *
-from fastai.vision.models.unet import *
 from fastai.callback.hook import *
 from fastai.vision.widgets import *
-from fastai.vision.learner import *
 from fastprogress import progress_bar, master_bar
 from .core import *
 import seaborn as sns
@@ -38,8 +33,9 @@ class GeneratorBCE(nn.Module):
         super().__init__()
         self.bce = nn.BCEWithLogitsLoss()
     def forward(self, fake_pred):
-        if not hasattr(self, 'ones'): self.ones = fake_pred.new_ones(*fake_pred.shape)
-        if self.ones.shape!=fake_pred.shape: self.ones = fake_pred.new_ones(*fake_pred.shape)
+        #print(fake_pred.shape, fake_pred.dtype, type(fake_pred))
+        if not hasattr(self, 'ones'): self.ones = fake_pred.new_ones(fake_pred.shape)
+        if self.ones.shape!=fake_pred.shape: self.ones = fake_pred.new_ones(fake_pred.shape)
         return self.bce(fake_pred, self.ones)
 
 # Cell
@@ -48,29 +44,30 @@ gen_bce_l1_loss = GeneratorLoss(GeneratorBCE(), nn.L1Loss(), 1, 100)
 # Cell
 def gen_bce_loss(learn, output, target):
     fake_pred = learn.model.critic(output)
-    ones = fake_pred.new_ones(*fake_pred.shape)
+    ones = fake_pred.new_ones(fake_pred.shape)
     bce = nn.BCEWithLogitsLoss()(fake_pred, ones)
     return bce
 
 # Cell
 def crit_bce_loss(real_pred, fake_pred):
-    ones  = real_pred.new_ones(*real_pred.shape)
-    zeros = fake_pred.new_zeros(*fake_pred.shape)
+    ones  = real_pred.new_ones(real_pred.shape)
+    zeros = fake_pred.new_zeros(fake_pred.shape)
     loss_neg = nn.BCEWithLogitsLoss()(fake_pred, zeros)
     loss_pos = nn.BCEWithLogitsLoss()(real_pred, ones)
     return (loss_neg + loss_pos)/2
 
 def crit_real_bce(learn, real_pred, input):
-    ones  = real_pred.new_ones(*real_pred.shape)
+    ones  = real_pred.new_ones(real_pred.shape)
     rbce = nn.BCEWithLogitsLoss()(real_pred, ones)
     return rbce
 
 def crit_fake_bce(learn, real_pred, input):
     fake = learn.model.generator(input).requires_grad_(False)
     fake_pred = learn.model.critic(fake)
-    zeros = fake_pred.new_zeros(*fake_pred.shape)
+    zeros = fake_pred.new_zeros(fake_pred.shape)
     fbce = nn.BCEWithLogitsLoss()(fake_pred, zeros)
     return fbce
+#TypeError: new_ones(): argument 'dtype' must be torch.dtype, not int
 
 # Cell
 def Patch70(n_channels):
