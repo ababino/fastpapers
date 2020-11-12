@@ -56,13 +56,13 @@ def crit_bce_loss(real_pred, fake_pred):
     loss_pos = nn.BCEWithLogitsLoss()(real_pred, ones)
     return (loss_neg + loss_pos)/2
 
-def crit_real_bce(learn, real_pred, input):
+def crit_real_bce(learn, real_pred, inp):
     ones  = real_pred.new_ones(real_pred.shape)
     rbce = nn.BCEWithLogitsLoss()(real_pred, ones)
     return rbce
 
-def crit_fake_bce(learn, real_pred, input):
-    fake = learn.model.generator(input).requires_grad_(False)
+def crit_fake_bce(learn, real_pred, inp):
+    fake = learn.model.generator(inp).requires_grad_(False)
     fake_pred = learn.model.critic(fake)
     zeros = fake_pred.new_zeros(fake_pred.shape)
     fbce = nn.BCEWithLogitsLoss()(fake_pred, zeros)

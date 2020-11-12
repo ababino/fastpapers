@@ -55,6 +55,20 @@ nb_path: "01_isola2017image.ipynb"
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>In this paper, the authors address the problem of image to image translation where and image from one domain is <em>translated</em> into another domain. The source image is fed into a <a href="/fastpapers/core.html#ConditionalGenerator"><code>ConditionalGenerator</code></a> network to generate its translated version. Then a <a href="/fastpapers/core.html#SiameseCritic"><code>SiameseCritic</code></a> judges if a given pair is real of fake, as shown Fig. 2 of the paper that we copy here:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="/fastpapers/images/isola2017image_fig2.png" alt="isola fig 2"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Imports">Imports<a class="anchor-link" href="#Imports"> </a></h2>
 </div>
 </div>
@@ -538,7 +552,7 @@ parameters converted too when you call :meth:<code>to</code>, etc.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="crit_real_bce" class="doc_header"><code>crit_real_bce</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/isola2017image.py#L59" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>crit_real_bce</code>(<strong><code>learn</code></strong>, <strong><code>real_pred</code></strong>, <strong><code>input</code></strong>)</p>
+<h4 id="crit_real_bce" class="doc_header"><code>crit_real_bce</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/isola2017image.py#L59" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>crit_real_bce</code>(<strong><code>learn</code></strong>, <strong><code>real_pred</code></strong>, <strong><code>inp</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -562,7 +576,7 @@ parameters converted too when you call :meth:<code>to</code>, etc.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="crit_fake_bce" class="doc_header"><code>crit_fake_bce</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/isola2017image.py#L64" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>crit_fake_bce</code>(<strong><code>learn</code></strong>, <strong><code>real_pred</code></strong>, <strong><code>input</code></strong>)</p>
+<h4 id="crit_fake_bce" class="doc_header"><code>crit_fake_bce</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/isola2017image.py#L64" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>crit_fake_bce</code>(<strong><code>learn</code></strong>, <strong><code>real_pred</code></strong>, <strong><code>inp</code></strong>)</p>
 </blockquote>
 
 </div>
