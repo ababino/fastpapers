@@ -2,9 +2,9 @@
 
 __all__ = ['explode_types', 'explode_lens', 'explode_shapes', 'explode_ranges', 'pexpt', 'pexpl', 'pexps', 'get_cudas',
            'receptive_fields', 'ImageNTuple', 'ImageTupleBlock', 'ConditionalGenerator', 'SiameseCritic', 'GenMetric',
-           'CriticMetric', 'l1', 'l1', 'ProgressImage', 'download_file_from_google_drive', 'save_response_content',
-           'FID_WEIGHTS_URL', 'renorm_stats', 'get_tuple_files_by_stem', 'ParentsSplitter', 'CGANDataLoaders',
-           'basic_name', 'GatherLogs', 'RunNBatches']
+           'CriticMetric', 'l1', 'ProgressImage', 'download_file_from_google_drive', 'save_response_content',
+           'FID_WEIGHTS_URL', 'renorm_stats', 'get_tuple_files_by_stem', 'ParentsSplitter', 'FilterRelToPath',
+           'CGANDataLoaders', 'basic_name', 'GatherLogs', 'RunNBatches']
 
 # Cell
 import gc
@@ -122,16 +122,16 @@ def ImageTupleBlock():
 
 # Cell
 class ConditionalGenerator(nn.Module):
-    '''Wraper around a GAN generator that returns the generated image and the input.'''
+    '''Wraper around a GAN generator that returns the generated image and the inp.'''
     def __init__(self, gen):
         super().__init__()
         self.gen = gen
     def forward(self, x):
         if is_listy(x):
-            input = torch.cat(x, axis=1)
+            inp = torch.cat(x, axis=1)
         else:
-            input = x
-        return ImageNTuple(x, TensorImage(self.gen(input)))
+            inp = x
+        return ImageNTuple(x, TensorImage(self.gen(inp)))
 
 # Cell
 class SiameseCritic(Module):
@@ -155,8 +155,29 @@ class CriticMetric(AvgMetric):
             self.count += bs
 
 # Cell
-def l1(learn, output, target): return nn.L1Loss()(output[-1], target[-1])
-l1 = GenMetric(l1)
+def _l1(learn, output, target): return nn.L1Loss()(output[-1], target[-1])
+l1 = GenMetric(_l1)
+
+# Cell
+@patch
+def export(self:GANLearner, fname='export.pkl', pickle_protocol=2):
+    "Export the content of `self` without the items and the optimizer state for inference"
+    if rank_distrib(): return # don't export if child proc
+    self.gan_trainer.switch(gen_mode=True)
+    self._end_cleanup()
+    old_dbunch = self.dls
+    self.dls = self.dls.new_empty()
+    state = self.opt.state_dict() if self.opt is not None else None
+    self.opt = None
+    with warnings.catch_warnings():
+        #To avoid the warning that come from PyTorch about model not being checked
+        warnings.simplefilter("ignore")
+        torch.save(self, self.path/fname, pickle_protocol=pickle_protocol)
+    set_freeze_model(self.model, True)
+    self.create_opt()
+    if state is not None: self.opt.load_state_dict(state)
+    self.dls = old_dbunch
+    self.gan_trainer.switch(gen_mode=True)
 
 # Cell
 class ProgressImage(Callback):
@@ -275,6 +296,7 @@ def _parent_idxs(items, name):
     def _inner(items, name): return mask2idxs(Path(o).parent.name == name for o in items)
     return [i for n in L(name) for i in _inner(items,n)]
 
+# Cell
 @delegates(get_image_files)
 def get_tuple_files_by_stem(paths, folders=None, **kwargs):
     if not is_listy(paths): paths = [paths]
@@ -283,6 +305,7 @@ def get_tuple_files_by_stem(paths, folders=None, **kwargs):
     out = L(groupby(files, attrgetter('stem')).values())
     return out
 
+# Cell
 def ParentsSplitter(train_name='train', valid_name='valid'):
     "Split `items` from the grand parent folder names (`train_name` and `valid_name`)."
     def _inner(o):
@@ -291,23 +314,34 @@ def ParentsSplitter(train_name='train', valid_name='valid'):
         return tindex, vindex
     return _inner
 
+# Cell
+class FilterRelToPath:
+    def __init__(self, path): self.path = path
+    def __call__(self, o): return L(o).filter(Self.is_relative_to(self.path))
+
+# Cell
 class CGANDataLoaders(DataLoaders):
     "Basic wrapper around several `DataLoader`s with factory methods for CGAN problems"
     @classmethod
     @delegates(DataLoaders.from_dblock)
     def from_paths(cls, input_path, target_path, train='train', valid='valid', valid_pct=None, seed=None, vocab=None, item_tfms=None,
-                  batch_tfms=None, n_inp=1, **kwargs):
+                  batch_tfms=None, n_inp=1, add_normalize=True, **kwargs):
         "Create from imagenet style dataset in `path` with `train` and `valid` subfolders (or provide `valid_pct`)"
         splitter = ParentsSplitter(train_name=train, valid_name=valid) if valid_pct is None else RandomSplitter(valid_pct, seed=seed)
         get_items = get_tuple_files_by_stem if valid_pct else partial(get_tuple_files_by_stem, folders=[train, valid])
-        get_x=lambda o: L(o).filter(Self.is_relative_to(input_path))#[0]
-        #if n_inp == 1: get_x = lambda x: get_x(x)[0]
-        input_block = ImageBlock if n_inp==1 else ImageTupleBlock
+        if not Path(input_path).is_absolute(): input_path = Config()['data'] / input_path
+        if not Path(target_path).is_absolute(): target_path = Config()['data'] / target_path
+        if add_normalize:
+            if batch_tfms is None:
+                batch_tfms = [Normalize.from_stats([0.5]*3, [0.5]*3)]
+            else:
+                batch_tfms += [Normalize.from_stats([0.5]*3, [0.5]*3)]
+
         dblock = DataBlock(blocks=(ImageTupleBlock, ImageTupleBlock),
                            get_items=get_items,
                            splitter=splitter,
-                           get_x=get_x,#lambda o: L(o).filter(lambda x: x.is_relative_to(input_path))[0],
-                           #get_x=lambda o: L(o).filter(lambda x: x.parent.parent==input_path)[0],
+                           get_x=FilterRelToPath(input_path),
+                           get_y=noop,
                            item_tfms=item_tfms,
                            batch_tfms=batch_tfms)
         return cls.from_dblock(dblock, [input_path, target_path], **kwargs)
@@ -395,9 +429,11 @@ class GatherLogs(Callback):
 # Cell
 class RunNBatches(Callback):
     run_after=Recorder
-    def __init__(self, n=2): self.n = n
+    def __init__(self, n=2, no_valid=True): store_attr()
     def before_train(self): self.n_batch = 0
-    def before_validate(self): self.n_batch = 0
+    def before_validate(self):
+        self.n_batch = 0
+        if self.no_valid: raise CancelValidException
     def after_batch(self):
         self.n_batch += 1
         if self.n_batch>self.n:
