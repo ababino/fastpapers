@@ -40,19 +40,12 @@ class Inception:
 
 # Cell
 class FIDMetric(Metric):
-    def __init__(self, model, dl, get_prediction=noop):#, get_prediction=noop
-        #self.get_prediction = get_prediction
+    def __init__(self, model, dl, get_prediction=noop):
         self.func = model
-        #b = first(dl)
-        #if getattr(b, 'is_cuda', False): self.func.model.cuda()
         if dl.device.type == 'cuda': self.func.model.cuda()
         total = []
         for b in progress_bar(dl):
             b = get_prediction(b)
-            #if isinstance(b, tuple):
-            #    if len(b)==2:
-            #        b = b[1]
-            #b = b[-1] if is_listy(b) else b
             total.append(self.func(b))
         total = torch.cat(total).cpu()
         self.dist_norm = total.mean(axis=0).pow(2).sum().sqrt()
