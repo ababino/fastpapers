@@ -247,14 +247,13 @@ class CocoEval(Callback):
         metrics = 'AP AP50 AP75 AP_small AP_medium AP_large AR1 AR10 AR100 AR_small AR_medium AR_large'.split()
         self.metrics = L(metrics).map(partial(getattr, self)).map(ValueMetric)
 
-    def before_validate(self):#, vocab, bs
+    def before_validate(self):
         vocab = self.learn.dls.vocab
         bs = self.learn.dls.bs
         self.gt_ds = {'annotations': [], 'images': [], 'categories': []}
         self.dt_ds = {'annotations': [], 'images': [], 'categories': []}
         self.gt_ds['categories'] = [{'id': i+1,'name':o} for i,o in enumerate(vocab)]
         self.dt_ds['categories'] = [{'id': i+1,'name':o} for i,o in enumerate(vocab)]
-        #self.empty_cls = vocab[0]
 
         self.reset_counters()
         self.bs = bs

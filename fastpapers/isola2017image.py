@@ -4,16 +4,11 @@ __all__ = ['GeneratorLoss', 'GeneratorBCE', 'gen_bce_l1_loss', 'gen_bce_loss', '
            'crit_fake_bce', 'Patch70', 'UnetUpsample', 'CGenerator', 'pix2pix_learner']
 
 # Cell
-from fastai.data.external import untar_data
-from fastai.data.transforms import get_image_files
-from fastai.data import *
-from fastai.basics import *
+from fastai.data.all import *
 from fastai.vision.all import *
 from fastcore.all import *
 from fastai.vision.gan import *
-from fastai.callback.hook import *
 from fastai.vision.widgets import *
-from fastprogress import progress_bar, master_bar
 from .core import *
 import seaborn as sns
 
@@ -56,11 +51,13 @@ def crit_bce_loss(real_pred, fake_pred):
     loss_pos = nn.BCEWithLogitsLoss()(real_pred, ones)
     return (loss_neg + loss_pos)/2
 
+# Cell
 def crit_real_bce(learn, real_pred, inp):
     ones  = real_pred.new_ones(real_pred.shape)
     rbce = nn.BCEWithLogitsLoss()(real_pred, ones)
     return rbce
 
+# Cell
 def crit_fake_bce(learn, real_pred, inp):
     fake = learn.model.generator(inp).requires_grad_(False)
     fake_pred = learn.model.critic(fake)
@@ -96,6 +93,7 @@ class UnetUpsample(Module):
     def forward(self, x):
         return torch.cat([self.upsample(x), self.hook.stored], dim=1)
 
+# Cell
 class CGenerator(SequentialEx):
     def __init__(self, n_channels, out_channels, enc_l=5):
         encoder = []

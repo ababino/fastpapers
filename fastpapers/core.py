@@ -3,8 +3,8 @@
 __all__ = ['explode_types', 'explode_lens', 'explode_shapes', 'explode_ranges', 'pexpt', 'pexpl', 'pexps', 'get_cudas',
            'receptive_fields', 'ImageNTuple', 'ImageTupleBlock', 'ConditionalGenerator', 'SiameseCritic', 'GenMetric',
            'CriticMetric', 'l1', 'ProgressImage', 'download_file_from_google_drive', 'save_response_content',
-           'FID_WEIGHTS_URL', 'renorm_stats', 'get_tuple_files_by_stem', 'ParentsSplitter', 'FilterRelToPath',
-           'CGANDataLoaders', 'basic_name', 'GatherLogs', 'RunNBatches']
+           'FID_WEIGHTS_URL', 'download_coco', 'renorm_stats', 'get_tuple_files_by_stem', 'ParentsSplitter',
+           'FilterRelToPath', 'CGANDataLoaders', 'basic_name', 'GatherLogs', 'RunNBatches']
 
 # Cell
 import gc
@@ -15,6 +15,7 @@ from fastai.data.all import *
 from fastai.vision.all import *
 from fastai.vision.gan import *
 from fastai.callback.hook import *
+from fastai.test_utils import *
 import pandas as pd
 import seaborn as sns
 
@@ -181,6 +182,7 @@ def export(self:GANLearner, fname='export.pkl', pickle_protocol=2):
 
 # Cell
 class ProgressImage(Callback):
+    '''Shows a sample of the generator after every epoch. It is a good idea to keep a human in the loop.'''
     run_after = GANTrainer
     @delegates(show_image)
     def __init__(self, out_widget, save_img=False, folder='pred_imgs', conditional=False, **kwargs):
@@ -203,7 +205,6 @@ class ProgressImage(Callback):
         if not hasattr(self.learn.gan_trainer, 'last_gen'): return
         b = self.learn.gan_trainer.last_gen
         gt = self.last_gen_target
-        #gt, b = self.learn.dls.decode((gt, b))
         b = self.learn.dls.decode((b,))
         gt = self.learn.dls.decode(gt)
         gt, imt = batch_to_samples((gt, b), max_n=1)[0]
@@ -244,6 +245,11 @@ URLs.FACADES = 'http://efrosgans.eecs.berkeley.edu/pix2pix/datasets/facades.tar.
 URLs.FACADES_BASE = 'http://cmp.felk.cvut.cz/~tylecr1/facade/CMP_facade_DB_base.zip'
 URLs.FACADES_EXTENDED = 'http://cmp.felk.cvut.cz/~tylecr1/facade/CMP_facade_DB_extended.zip'
 URLs.CELEBA = '0B7EVK8r0v71pZjFTYXZWM3FlRnM'
+URLs.COCO_VAL2017 = 'http://images.cocodataset.org/zips/val2017.zip'
+URLs.COCO_TEST2017 = 'http://images.cocodataset.org/zips/test2017.zip'
+URLs.COCO_TRAIN2017 = 'http://images.cocodataset.org/zips/train2017.zip'
+URLs.COCO_TRAINVAL_ANN = 'http://images.cocodataset.org/annotations/annotations_trainval2017.zip'
+URLs.COCO_TEST_ANN = 'http://images.cocodataset.org/annotations/image_info_test2017.zip'
 
 # Cell
 def download_file_from_google_drive(file_id, destination, folder_name=None):
@@ -276,6 +282,18 @@ def save_response_content(response, destination):
 
 # Cell
 FID_WEIGHTS_URL = 'https://github.com/mseitzer/pytorch-fid/releases/download/fid_weights/pt_inception-2015-12-05-6726825d.pth'
+
+# Cell
+def download_coco(force_download=False):
+    dest = Config()['data'] / 'coco'
+    paths = {'base': dest}
+    paths['train'] = untar_data(URLs.COCO_TRAIN2017, dest=dest, force_download=force_download)
+    paths['val'] = untar_data(URLs.COCO_VAL2017, dest=dest, force_download=force_download)
+    paths['test'] = untar_data(URLs.COCO_TEST2017, dest=dest, force_download=force_download)
+    paths['trainval_ann'] = untar_data(URLs.COCO_TRAINVAL_ANN, dest=dest, force_download=force_download)
+    paths['train_ann'] = paths['trainval_ann'] / 'instances_train2017.json'
+    paths['val_ann'] = paths['trainval_ann'] / 'instances_val2017.json'
+    return paths
 
 # Cell
 renorm_stats = (2*torch.tensor(imagenet_stats[0])-1).tolist(), (2*torch.tensor(imagenet_stats[1])).tolist()
@@ -372,6 +390,7 @@ def basic_name(flds=None):
 
 # Cell
 class GatherLogs(Callback):
+    '''Gather logs from one or more experiments.'''
     run_after=Recorder
     def __init__(self, experiments='logs', save_after_fit=True):
         self.experiments = experiments
@@ -430,16 +449,9 @@ class GatherLogs(Callback):
 class RunNBatches(Callback):
     run_after=Recorder
     def __init__(self, n=2, no_valid=True): store_attr()
-    def before_train(self): self.n_batch = 0
-    def before_validate(self):
-        self.n_batch = 0
-        if self.no_valid: raise CancelValidException
     def after_batch(self):
-        self.n_batch += 1
-        if self.n_batch>self.n:
-            if self.training:
-                raise CancelTrainException
-            else:
-                raise CancelValidException
+        if self.iter >= self.n:
+            if self.no_valid or not self.training: raise CancelFitException
+            raise CancelTrainException
     def after_cancel_train(self): self.recorder.cancel_train = False
     def after_cancel_validate(self): self.recorder.cancel_valid = False
