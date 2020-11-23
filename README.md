@@ -2,6 +2,10 @@
 > Play LEGO with papers.
 
 
+```python
+torch.cuda.set_device(3)
+```
+
 `fastpapers` is a python library where I use [fastai](https://docs.fast.ai/) to reproduce papers on [Jupyter Notebooks](https://jupyter.org/). I use [nbdev](https://nbdev.fast.ai/) to turn these notebooks into modules.
 
 ## Install
@@ -9,6 +13,118 @@
 `pip install fastpapers`
 
 ## How to use
+
+### Train DETR in 3 lines of code
+
+Download the data
+
+```python
+path = download_coco(force_download=False)
+```
+
+Create the DataLoaders, the Learner, and fit.
+
+```python
+dls = CocoDataLoaders.from_sources(path, vocab=coco_vocab, num_workers=0)
+learnd = detr_learner(dls)
+learnd.fit(1, lr=[1e-5, 1e-5, 1e-5])
+```
+
+    Using cache found in /home/andres/.cache/torch/hub/facebookresearch_detr_master
+
+
+
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: left;">
+      <th>epoch</th>
+      <th>train_loss</th>
+      <th>valid_loss</th>
+      <th>AP</th>
+      <th>AP50</th>
+      <th>AP75</th>
+      <th>AP_small</th>
+      <th>AP_medium</th>
+      <th>AP_large</th>
+      <th>AR1</th>
+      <th>AR10</th>
+      <th>AR100</th>
+      <th>AR_small</th>
+      <th>AR_medium</th>
+      <th>AR_large</th>
+      <th>time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>5.912706</td>
+      <td>7.469872</td>
+      <td>0.486210</td>
+      <td>0.585427</td>
+      <td>0.515968</td>
+      <td>0.318466</td>
+      <td>0.470359</td>
+      <td>0.571754</td>
+      <td>0.362405</td>
+      <td>0.557437</td>
+      <td>0.572482</td>
+      <td>0.391057</td>
+      <td>0.554963</td>
+      <td>0.641092</td>
+      <td>2:08:52</td>
+    </tr>
+  </tbody>
+</table>
+
+
+Show the results
+
+```python
+with learnd.removed_cbs(learnd.coco_eval): learnd.show_results(max_n=8, figsize=(10,10))
+```
+
+
+
+
+
+
+![png](docs/images/output_11_1.png)
+
+
+### Superresolution in 4 lines of code
+
+Download the data
+
+```python
+path = untar_data(URLs.IMAGENETTE)
+```
+
+Create the DataLoaders, the Learner adn fit.
+
+```python
+#hide_output
+db = DataBlock(blocks=(ResImageBlock(72), ResImageBlock(288)),
+               get_items=get_image_files,
+               batch_tfms=Normalize.from_stats([0.5]*3, [0.5]*3))
+dls = db.dataloaders(path, bs=4, num_workers=4)
+learn = superres_learner(dls)
+learn.fit(16, lr=1e-3, wd=0)
+```
+
+```python
+learn.show_results()
+```
+
+
+
+
+
+
+![png](docs/images/output_17_1.png)
+
+
+### Library structure
 
 The name of each module is the [bibtexkey](https://en.wikipedia.org/wiki/BibTeX#Field_types) of the corresponing paper.
 For example, if you want to use the FID metric from [Heusel, Martin, et al. 2017](http://papers.nips.cc/paper/7240-gans-trained-by-a-two-t), you can import it like so:
@@ -39,7 +155,7 @@ it.show();
 ```
 
 
-![png](docs/images/output_10_0.png)
+![png](docs/images/output_25_0.png)
 
 
 Or useful functions for debuging like `explode_shapes` or `explode_ranges`
