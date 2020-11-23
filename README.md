@@ -2,10 +2,6 @@
 > Play LEGO with papers.
 
 
-```python
-torch.cuda.set_device(3)
-```
-
 `fastpapers` is a python library where I use [fastai](https://docs.fast.ai/) to reproduce papers on [Jupyter Notebooks](https://jupyter.org/). I use [nbdev](https://nbdev.fast.ai/) to turn these notebooks into modules.
 
 ## Install
@@ -19,19 +15,18 @@ torch.cuda.set_device(3)
 Download the data
 
 ```python
+#slow
 path = download_coco(force_download=False)
 ```
 
 Create the DataLoaders, the Learner, and fit.
 
 ```python
+#slow
 dls = CocoDataLoaders.from_sources(path, vocab=coco_vocab, num_workers=0)
 learnd = detr_learner(dls)
 learnd.fit(1, lr=[1e-5, 1e-5, 1e-5])
 ```
-
-    Using cache found in /home/andres/.cache/torch/hub/facebookresearch_detr_master
-
 
 
 <table border="1" class="dataframe">
@@ -58,21 +53,21 @@ learnd.fit(1, lr=[1e-5, 1e-5, 1e-5])
   <tbody>
     <tr>
       <td>0</td>
-      <td>5.912706</td>
-      <td>7.469872</td>
-      <td>0.486210</td>
-      <td>0.585427</td>
-      <td>0.515968</td>
-      <td>0.318466</td>
-      <td>0.470359</td>
-      <td>0.571754</td>
-      <td>0.362405</td>
-      <td>0.557437</td>
-      <td>0.572482</td>
-      <td>0.391057</td>
-      <td>0.554963</td>
-      <td>0.641092</td>
-      <td>2:08:52</td>
+      <td>5.892842</td>
+      <td>7.636298</td>
+      <td>0.475381</td>
+      <td>0.574125</td>
+      <td>0.506063</td>
+      <td>0.297741</td>
+      <td>0.458006</td>
+      <td>0.560994</td>
+      <td>0.355018</td>
+      <td>0.545646</td>
+      <td>0.560374</td>
+      <td>0.375141</td>
+      <td>0.541728</td>
+      <td>0.630330</td>
+      <td>2:05:24</td>
     </tr>
   </tbody>
 </table>
@@ -81,6 +76,7 @@ learnd.fit(1, lr=[1e-5, 1e-5, 1e-5])
 Show the results
 
 ```python
+#slow
 with learnd.removed_cbs(learnd.coco_eval): learnd.show_results(max_n=8, figsize=(10,10))
 ```
 
@@ -89,7 +85,7 @@ with learnd.removed_cbs(learnd.coco_eval): learnd.show_results(max_n=8, figsize=
 
 
 
-![png](docs/images/output_11_1.png)
+![png](docs/images/output_10_1.png)
 
 
 ### Superresolution in 4 lines of code
@@ -97,6 +93,7 @@ with learnd.removed_cbs(learnd.coco_eval): learnd.show_results(max_n=8, figsize=
 Download the data
 
 ```python
+#slow
 path = untar_data(URLs.IMAGENETTE)
 ```
 
@@ -104,6 +101,7 @@ Create the DataLoaders, the Learner adn fit.
 
 ```python
 #hide_output
+#slow
 db = DataBlock(blocks=(ResImageBlock(72), ResImageBlock(288)),
                get_items=get_image_files,
                batch_tfms=Normalize.from_stats([0.5]*3, [0.5]*3))
@@ -113,6 +111,7 @@ learn.fit(16, lr=1e-3, wd=0)
 ```
 
 ```python
+#slow
 learn.show_results()
 ```
 
@@ -121,7 +120,7 @@ learn.show_results()
 
 
 
-![png](docs/images/output_17_1.png)
+![png](docs/images/output_16_1.png)
 
 
 ### Library structure
@@ -155,7 +154,7 @@ it.show();
 ```
 
 
-![png](docs/images/output_25_0.png)
+![png](docs/images/output_24_0.png)
 
 
 Or useful functions for debuging like `explode_shapes` or `explode_ranges`

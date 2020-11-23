@@ -234,7 +234,7 @@ class DETRLoss(nn.Module):
 class DETR(nn.Module):
     def __init__(self, pretrained=True, n_classes=92, aux_loss=False):
         super().__init__()
-        self.model = torch.hub.load('facebookresearch/detr', 'detr_resnet50', pretrained=pretrained)
+        self.model = torch.hub.load('facebookresearch/detr', 'detr_resnet50', pretrained=pretrained, verbose=False)
         if self.model.class_embed.out_features!=n_classes:
             self.model.class_embed = nn.Linear(256, n_classes)
         self.model.aux_loss = aux_loss
