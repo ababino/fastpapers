@@ -2,6 +2,10 @@
 > Play LEGO with papers.
 
 
+```python
+#all_slow
+```
+
 `fastpapers` is a python library where I use [fastai](https://docs.fast.ai/) to reproduce papers on [Jupyter Notebooks](https://jupyter.org/). I use [nbdev](https://nbdev.fast.ai/) to turn these notebooks into modules.
 
 ## Install
@@ -15,14 +19,12 @@
 Download the data
 
 ```python
-#slow
 path = download_coco(force_download=False)
 ```
 
 Create the DataLoaders, the Learner, and fit.
 
 ```python
-#slow
 dls = CocoDataLoaders.from_sources(path, vocab=coco_vocab, num_workers=0)
 learnd = detr_learner(dls)
 learnd.fit(1, lr=[1e-5, 1e-5, 1e-5])
@@ -76,7 +78,6 @@ learnd.fit(1, lr=[1e-5, 1e-5, 1e-5])
 Show the results
 
 ```python
-#slow
 with learnd.removed_cbs(learnd.coco_eval): learnd.show_results(max_n=8, figsize=(10,10))
 ```
 
@@ -85,7 +86,7 @@ with learnd.removed_cbs(learnd.coco_eval): learnd.show_results(max_n=8, figsize=
 
 
 
-![png](docs/images/output_10_1.png)
+![png](docs/images/output_11_1.png)
 
 
 ### Superresolution in 4 lines of code
@@ -93,7 +94,6 @@ with learnd.removed_cbs(learnd.coco_eval): learnd.show_results(max_n=8, figsize=
 Download the data
 
 ```python
-#slow
 path = untar_data(URLs.IMAGENETTE)
 ```
 
@@ -101,7 +101,6 @@ Create the DataLoaders, the Learner adn fit.
 
 ```python
 #hide_output
-#slow
 db = DataBlock(blocks=(ResImageBlock(72), ResImageBlock(288)),
                get_items=get_image_files,
                batch_tfms=Normalize.from_stats([0.5]*3, [0.5]*3))
@@ -111,7 +110,6 @@ learn.fit(16, lr=1e-3, wd=0)
 ```
 
 ```python
-#slow
 learn.show_results()
 ```
 
@@ -120,7 +118,7 @@ learn.show_results()
 
 
 
-![png](docs/images/output_16_1.png)
+![png](docs/images/output_17_1.png)
 
 
 ### Library structure
@@ -154,7 +152,7 @@ it.show();
 ```
 
 
-![png](docs/images/output_24_0.png)
+![png](docs/images/output_25_0.png)
 
 
 Or useful functions for debuging like `explode_shapes` or `explode_ranges`
