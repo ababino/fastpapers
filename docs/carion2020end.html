@@ -121,7 +121,7 @@ nb_path: "04_carion2020end.ipynb"
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>We have to change <code>bb_pad</code> so it does nothing if there are no bounding boxes and classes. This is needed when we are decoding.</p>
+<p>We have to change <a href="/fastpapers/carion2020end.html#bb_pad"><code>bb_pad</code></a> so it does nothing if there are no bounding boxes and classes. This is needed when we are decoding.</p>
 
 </div>
 </div>
@@ -129,27 +129,31 @@ nb_path: "04_carion2020end.ipynb"
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">bb_pad</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">pad_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-    <span class="s2">&quot;Function that collect `samples` of labelled bboxes and adds padding with `pad_idx`.&quot;</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">:])</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
-        <span class="n">samples</span> <span class="o">=</span> <span class="p">[(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">*</span><span class="n">clip_remove_empty</span><span class="p">(</span><span class="o">*</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">samples</span><span class="p">]</span>
-        <span class="n">max_len</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">samples</span><span class="p">])</span>
-        <span class="k">def</span> <span class="nf">_f</span><span class="p">(</span><span class="n">img</span><span class="p">,</span><span class="n">bbox</span><span class="p">,</span><span class="n">lbl</span><span class="p">):</span>
-            <span class="n">bbox</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">bbox</span><span class="p">,</span><span class="n">bbox</span><span class="o">.</span><span class="n">new_zeros</span><span class="p">(</span><span class="n">max_len</span><span class="o">-</span><span class="n">bbox</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">4</span><span class="p">)])</span>
-            <span class="n">lbl</span>  <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">lbl</span><span class="p">,</span> <span class="n">lbl</span> <span class="o">.</span><span class="n">new_zeros</span><span class="p">(</span><span class="n">max_len</span><span class="o">-</span><span class="n">lbl</span> <span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="n">pad_idx</span><span class="p">])</span>
-            <span class="k">return</span> <span class="n">img</span><span class="p">,</span><span class="n">bbox</span><span class="p">,</span><span class="n">lbl</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">_f</span><span class="p">(</span><span class="o">*</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">samples</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">samples</span>
-</pre></div>
+<div class="output_wrapper">
+<div class="output">
 
-    </div>
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="bb_pad" class="doc_header"><code>bb_pad</code><a href="https://github.com/fastai/fastai/tree/master/fastai/vision/data.py#L31" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>bb_pad</code>(<strong><code>samples</code></strong>, <strong><code>pad_idx</code></strong>=<em><code>0</code></em>)</p>
+</blockquote>
+<p>Function that collect <code>samples</code> of labelled bboxes and adds padding with <code>pad_idx</code>.</p>
+
+</div>
+
+</div>
+
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -189,7 +193,7 @@ nb_path: "04_carion2020end.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="ParentSplitter" class="doc_header"><code>ParentSplitter</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L46" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>ParentSplitter</code>(<strong><code>train_name</code></strong>=<em><code>'train'</code></em>, <strong><code>valid_name</code></strong>=<em><code>'valid'</code></em>)</p>
+<h4 id="ParentSplitter" class="doc_header"><code>ParentSplitter</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L60" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>ParentSplitter</code>(<strong><code>train_name</code></strong>=<em><code>'train'</code></em>, <strong><code>valid_name</code></strong>=<em><code>'valid'</code></em>)</p>
 </blockquote>
 <p>Split <code>items</code> from the grand parent folder names (<code>train_name</code> and <code>valid_name</code>).</p>
 
@@ -330,7 +334,7 @@ nb_path: "04_carion2020end.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="box_cxcywh_to_xyxy" class="doc_header"><code>box_cxcywh_to_xyxy</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L55" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>box_cxcywh_to_xyxy</code>(<strong><code>x</code></strong>)</p>
+<h4 id="box_cxcywh_to_xyxy" class="doc_header"><code>box_cxcywh_to_xyxy</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L69" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>box_cxcywh_to_xyxy</code>(<strong><code>x</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -380,7 +384,7 @@ nb_path: "04_carion2020end.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="box_xyxy_to_cxcywh" class="doc_header"><code>box_xyxy_to_cxcywh</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L62" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>box_xyxy_to_cxcywh</code>(<strong><code>x</code></strong>)</p>
+<h4 id="box_xyxy_to_cxcywh" class="doc_header"><code>box_xyxy_to_cxcywh</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L76" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>box_xyxy_to_cxcywh</code>(<strong><code>x</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -449,7 +453,7 @@ nb_path: "04_carion2020end.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="TensorBBoxWH" class="doc_header"><code>class</code> <code>TensorBBoxWH</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L69" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TensorBBoxWH</code>(<strong><code>x</code></strong>, <strong>**<code>kwargs</code></strong>) :: <code>TensorPoint</code></p>
+<h2 id="TensorBBoxWH" class="doc_header"><code>class</code> <code>TensorBBoxWH</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L83" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TensorBBoxWH</code>(<strong><code>x</code></strong>, <strong>**<code>kwargs</code></strong>) :: <code>TensorPoint</code></p>
 </blockquote>
 <p>Basic type for points in an image</p>
 
@@ -474,7 +478,7 @@ nb_path: "04_carion2020end.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="TensorBBoxTL" class="doc_header"><code>class</code> <code>TensorBBoxTL</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L70" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TensorBBoxTL</code>(<strong><code>x</code></strong>, <strong>**<code>kwargs</code></strong>) :: <code>TensorPoint</code></p>
+<h2 id="TensorBBoxTL" class="doc_header"><code>class</code> <code>TensorBBoxTL</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L84" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TensorBBoxTL</code>(<strong><code>x</code></strong>, <strong>**<code>kwargs</code></strong>) :: <code>TensorPoint</code></p>
 </blockquote>
 <p>Basic type for points in an image</p>
 
@@ -607,7 +611,7 @@ nb_path: "04_carion2020end.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="ToTL" class="doc_header"><code>class</code> <code>ToTL</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L82" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ToTL</code>(<strong><code>enc</code></strong>=<em><code>None</code></em>, <strong><code>dec</code></strong>=<em><code>None</code></em>, <strong><code>split_idx</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <code>Transform</code></p>
+<h2 id="ToTL" class="doc_header"><code>class</code> <code>ToTL</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L96" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>ToTL</code>(<strong><code>enc</code></strong>=<em><code>None</code></em>, <strong><code>dec</code></strong>=<em><code>None</code></em>, <strong><code>split_idx</code></strong>=<em><code>None</code></em>, <strong><code>order</code></strong>=<em><code>None</code></em>) :: <code>Transform</code></p>
 </blockquote>
 <p>Delegates (<code>__call__</code>,<code>decode</code>,<code>setup</code>) to (<code>encodes</code>,<code>decodes</code>,<code>setups</code>) if <code>split_idx</code> matches</p>
 
@@ -661,7 +665,7 @@ nb_path: "04_carion2020end.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="box_area" class="doc_header"><code>box_area</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L87" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>box_area</code>(<strong><code>boxes</code></strong>)</p>
+<h4 id="box_area" class="doc_header"><code>box_area</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L101" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>box_area</code>(<strong><code>boxes</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -692,7 +696,7 @@ nb_path: "04_carion2020end.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="all_op" class="doc_header"><code>all_op</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L90" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>all_op</code>(<strong><code>cmp</code></strong>)</p>
+<h4 id="all_op" class="doc_header"><code>all_op</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L104" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>all_op</code>(<strong><code>cmp</code></strong>)</p>
 </blockquote>
 <p>Compares all the elements of <code>a</code> and <code>b</code> using cmp.</p>
 
@@ -731,7 +735,7 @@ nb_path: "04_carion2020end.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="generalized_box_iou" class="doc_header"><code>generalized_box_iou</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L98" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>generalized_box_iou</code>(<strong><code>boxes1</code></strong>, <strong><code>boxes2</code></strong>, <strong><code>pairwise</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="generalized_box_iou" class="doc_header"><code>generalized_box_iou</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L112" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>generalized_box_iou</code>(<strong><code>boxes1</code></strong>, <strong><code>boxes2</code></strong>, <strong><code>pairwise</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Generalized IoU from <a href="https://giou.stanford.edu/">https://giou.stanford.edu/</a>
 The boxes should be in [x0, y0, x1, y1] format
@@ -820,7 +824,7 @@ This implemenation expects bs as first dim.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="DETRLoss" class="doc_header"><code>class</code> <code>DETRLoss</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L138" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DETRLoss</code>(<strong><code>classw</code></strong>=<em><code>1</code></em>, <strong><code>boxw</code></strong>=<em><code>1</code></em>, <strong><code>giouw</code></strong>=<em><code>1</code></em>, <strong><code>n_queries</code></strong>=<em><code>100</code></em>, <strong><code>th</code></strong>=<em><code>0.7</code></em>, <strong><code>eos_coef</code></strong>=<em><code>0.1</code></em>, <strong><code>n_classes</code></strong>=<em><code>92</code></em>) :: <code>Module</code></p>
+<h2 id="DETRLoss" class="doc_header"><code>class</code> <code>DETRLoss</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L152" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DETRLoss</code>(<strong><code>classw</code></strong>=<em><code>1</code></em>, <strong><code>boxw</code></strong>=<em><code>1</code></em>, <strong><code>giouw</code></strong>=<em><code>1</code></em>, <strong><code>n_queries</code></strong>=<em><code>100</code></em>, <strong><code>th</code></strong>=<em><code>0.7</code></em>, <strong><code>eos_coef</code></strong>=<em><code>0.1</code></em>, <strong><code>n_classes</code></strong>=<em><code>92</code></em>) :: <code>Module</code></p>
 </blockquote>
 <p>Base class for all neural network modules.</p>
 <p>Your models should also subclass this class.</p>
@@ -908,7 +912,7 @@ parameters converted too when you call :meth:<code>to</code>, etc.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="DETR" class="doc_header"><code>class</code> <code>DETR</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L234" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DETR</code>(<strong><code>pretrained</code></strong>=<em><code>True</code></em>, <strong><code>n_classes</code></strong>=<em><code>92</code></em>, <strong><code>aux_loss</code></strong>=<em><code>False</code></em>) :: <code>Module</code></p>
+<h2 id="DETR" class="doc_header"><code>class</code> <code>DETR</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L248" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>DETR</code>(<strong><code>pretrained</code></strong>=<em><code>True</code></em>, <strong><code>n_classes</code></strong>=<em><code>92</code></em>, <strong><code>aux_loss</code></strong>=<em><code>False</code></em>) :: <code>Module</code></p>
 </blockquote>
 <p>Base class for all neural network modules.</p>
 <p>Your models should also subclass this class.</p>
@@ -1102,7 +1106,7 @@ parameters converted too when you call :meth:<code>to</code>, etc.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="CocoEval" class="doc_header"><code>class</code> <code>CocoEval</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L252" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>CocoEval</code>() :: <code>Callback</code></p>
+<h2 id="CocoEval" class="doc_header"><code>class</code> <code>CocoEval</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L266" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>CocoEval</code>() :: <code>Callback</code></p>
 </blockquote>
 <p>Basic class handling tweaks of the training loop by changing a <code>Learner</code> in various events</p>
 
@@ -1147,7 +1151,7 @@ parameters converted too when you call :meth:<code>to</code>, etc.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="sorted_detr_trainable_params" class="doc_header"><code>sorted_detr_trainable_params</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L332" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>sorted_detr_trainable_params</code>(<strong><code>m</code></strong>)</p>
+<h4 id="sorted_detr_trainable_params" class="doc_header"><code>sorted_detr_trainable_params</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L346" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>sorted_detr_trainable_params</code>(<strong><code>m</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -1413,7 +1417,7 @@ anonimus functions we use classes to define these getters. I did not find a bett
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="GetAnnotatedImageFiles" class="doc_header"><code>class</code> <code>GetAnnotatedImageFiles</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L356" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GetAnnotatedImageFiles</code>(<strong><code>img2bbox</code></strong>)</p>
+<h2 id="GetAnnotatedImageFiles" class="doc_header"><code>class</code> <code>GetAnnotatedImageFiles</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L370" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GetAnnotatedImageFiles</code>(<strong><code>img2bbox</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -1437,7 +1441,7 @@ anonimus functions we use classes to define these getters. I did not find a bett
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="GetBboxAnnotation" class="doc_header"><code>class</code> <code>GetBboxAnnotation</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L359" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GetBboxAnnotation</code>(<strong><code>img2bbox</code></strong>)</p>
+<h2 id="GetBboxAnnotation" class="doc_header"><code>class</code> <code>GetBboxAnnotation</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L373" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GetBboxAnnotation</code>(<strong><code>img2bbox</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -1461,7 +1465,7 @@ anonimus functions we use classes to define these getters. I did not find a bett
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="GetClassAnnotation" class="doc_header"><code>class</code> <code>GetClassAnnotation</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L362" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GetClassAnnotation</code>(<strong><code>img2bbox</code></strong>)</p>
+<h2 id="GetClassAnnotation" class="doc_header"><code>class</code> <code>GetClassAnnotation</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L376" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>GetClassAnnotation</code>(<strong><code>img2bbox</code></strong>)</p>
 </blockquote>
 
 </div>
@@ -1492,7 +1496,7 @@ anonimus functions we use classes to define these getters. I did not find a bett
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="CocoDataLoaders" class="doc_header"><code>class</code> <code>CocoDataLoaders</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L367" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>CocoDataLoaders</code>(<strong>*<code>loaders</code></strong>, <strong><code>path</code></strong>=<em><code>'.'</code></em>, <strong><code>device</code></strong>=<em><code>None</code></em>) :: <code>DataLoaders</code></p>
+<h2 id="CocoDataLoaders" class="doc_header"><code>class</code> <code>CocoDataLoaders</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L381" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>CocoDataLoaders</code>(<strong>*<code>loaders</code></strong>, <strong><code>path</code></strong>=<em><code>'.'</code></em>, <strong><code>device</code></strong>=<em><code>None</code></em>) :: <code>DataLoaders</code></p>
 </blockquote>
 <p>Basic wrapper around several <code>DataLoader</code>s.</p>
 
@@ -1590,7 +1594,7 @@ anonimus functions we use classes to define these getters. I did not find a bett
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="detr_learner" class="doc_header"><code>detr_learner</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L445" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>detr_learner</code>(<strong><code>dls</code></strong>, <strong><code>pretrained</code></strong>=<em><code>True</code></em>, <strong><code>bs</code></strong>=<em><code>16</code></em>)</p>
+<h4 id="detr_learner" class="doc_header"><code>detr_learner</code><a href="https://github.com/ababino/fastpapers/tree/master/fastpapers/carion2020end.py#L459" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>detr_learner</code>(<strong><code>dls</code></strong>, <strong><code>pretrained</code></strong>=<em><code>True</code></em>, <strong><code>bs</code></strong>=<em><code>16</code></em>)</p>
 </blockquote>
 
 </div>
